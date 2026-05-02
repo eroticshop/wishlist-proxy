@@ -100,7 +100,7 @@ module.exports = async (req, res) => {
 
   /* ── POST ──────────────────────────────────────────────── */
   if (req.method === 'POST') {
-    const { customerId, action, productId, handle, items: incoming } = req.body || {};
+    const { customerId, action, productId, handle, items: incoming, ops } = req.body || {};
 
     if (!customerId || !/^\d+$/.test(String(customerId))) {
       return res.status(400).json({ error: 'Geçersiz customerId' });
@@ -113,6 +113,41 @@ module.exports = async (req, res) => {
       return res.status(502).json({ error: e.message });
     }
 
+    /* ─── v2.0 BATCH FORMAT ──────────────────────────────
+       Body: { customerId, ops: [{ op, productId, handle, ts }, ...] }
+       Reducer: op'ları sırayla uygular. Geçersiz op → sessizce atla.
+       MAX_ITEMS aşımı → sessizce atla (batch'te hata dönmek anlamsız,
+       client zaten optimistic update yaptı). */
+    if (Array.isArray(ops) && ops.length) {
+      for (const o of ops) {
+        const opName = o.op || o.action;
+        const pid    = o.productId ? String(o.productId) : '';
+
+        if (opName === 'add' && pid) {
+          const exists = current.some((i) => String(i.id) === pid);
+          if (!exists && current.length < MAX_ITEMS) {
+            current.push({
+              id: pid,
+              handle: o.handle || '',
+              addedAt: o.ts || Date.now(),
+            });
+          }
+        } else if (opName === 'remove' && pid) {
+          current = current.filter((i) => String(i.id) !== pid);
+        } else if (opName === 'clear') {
+          current = [];
+        }
+      }
+
+      try {
+        await setWishlist(String(customerId), current);
+        return res.status(200).json({ items: current });
+      } catch (e) {
+        return res.status(502).json({ error: e.message });
+      }
+    }
+
+    /* ─── LEGACY FORMAT (eski client / direct API) ─────── */
     switch (action) {
 
       case 'add': {
