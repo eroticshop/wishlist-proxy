@@ -1,4 +1,3 @@
-api/wishlist.js 
 const fetch = require('node-fetch');
 
 const SHOPIFY_STORE_DOMAIN = process.env.SHOPIFY_STORE_DOMAIN;
