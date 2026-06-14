@@ -4,6 +4,10 @@
     {
       "src": "/api/wishlist",
       "dest": "/api/wishlist.js"
+    },
+    {
+      "src": "/api/account/ping",
+      "dest": "/api/account/ping.js"
     }
   ]
 }
