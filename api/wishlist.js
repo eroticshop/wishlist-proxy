@@ -74,7 +74,7 @@ async function setWishlist(customerId, items) {
 }
 
 /* ── Ana handler ───────────────────────────────────────────── */
-module.exports = async (req, res) => {
+export default async (req, res) => {
   const reqOrigin = req.headers.origin || '';
   setCORS(res, reqOrigin);
 
