@@ -57,7 +57,7 @@ const M_UPDATE = `
 const M_DELETE = `
   mutation($customerId: ID!, $addressId: ID!) {
     customerAddressDelete(customerId: $customerId, addressId: $addressId) {
-      deletedCustomerAddressId userErrors { field message }
+      userErrors { field message }
     }
   }
 `;
