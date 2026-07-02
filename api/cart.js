@@ -21,7 +21,7 @@
 
 /* Env adlarını mevcut Vercel projesindeki (adres CRUD'un kullandığı)
    değişkenlerle eşleştir — asla hardcode etme. */
-const SHOP        = process.env.SHOPIFY_SHOP_DOMAIN;  // ör: magaza.myshopify.com
+const SHOP        = process.env.SHOPIFY_STORE_DOMAIN; // Vercel'deki mevcut değişken adı
 const TOKEN       = process.env.SHOPIFY_ADMIN_TOKEN;  // Admin API access token
 const API_VERSION = '2026-01';
 
