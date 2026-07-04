@@ -136,10 +136,21 @@ export default async function handler(req, res) {
 
   /* ── POST: ops batch uygula ── */
   if (req.method === 'POST') {
-    const body = req.body || {};
-    const ops  = Array.isArray(body.ops) ? body.ops : null;
+    /* Toleranslı parse: sendBeacon/proxy bazı durumlarda body'yi ham string
+       iletir — JSON.parse dene, bozuksa boş obje → aşağıda 400'e düşer */
+    let body = req.body || {};
+    if (typeof body === 'string') {
+      try { body = JSON.parse(body); } catch { body = {}; }
+    }
+    if (!body || typeof body !== 'object') body = {};
+
+    const ops = Array.isArray(body.ops) ? body.ops : null;
     if (!ops || !ops.length) {
       return res.status(400).json({ ok: false, error: 'ops_required' });
+    }
+    /* Defense-in-depth: client OPLOG_MAX=200 — üstü anormal trafiktir */
+    if (ops.length > 500) {
+      return res.status(400).json({ ok: false, error: 'ops_too_many' });
     }
 
     try {
