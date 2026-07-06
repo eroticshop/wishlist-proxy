@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "dependencies": {
+    "@upstash/redis": "^1.38.0",
     "node-fetch": "2.6.9"
   }
 }
