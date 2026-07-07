@@ -12,6 +12,14 @@
     {
       "src": "/api/kurye/quote",
       "dest": "/api/kurye/quote.js"
+    },
+    {
+      "src": "/api/kurye/admin/login",
+      "dest": "/api/kurye/admin/login.js"
+    },
+    {
+      "src": "/api/kurye/admin/config",
+      "dest": "/api/kurye/admin/config.js"
     }
   ]
 }
