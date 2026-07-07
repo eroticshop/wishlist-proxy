@@ -8,6 +8,10 @@
     {
       "src": "/api/account/ping",
       "dest": "/api/account/ping.js"
+    },
+    {
+      "src": "/api/kurye/quote",
+      "dest": "/api/kurye/quote.js"
     }
   ]
 }
