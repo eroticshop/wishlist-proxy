@@ -20,6 +20,10 @@
     {
       "src": "/api/kurye/admin/config",
       "dest": "/api/kurye/admin/config.js"
+    },
+    {
+      "src": "/api/kurye/admin",
+      "dest": "/api/kurye/admin/index.js"
     }
   ]
 }
